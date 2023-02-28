@@ -1,0 +1,7 @@
+.login-bg {
+    background-image: url('../../../assets/GFMachine.png');
+    background-size: cover;
+    background-position: center;
+    background-color: blueviolet;
+    height: 100vh;
+  }
