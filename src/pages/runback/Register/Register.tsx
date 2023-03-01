@@ -6,10 +6,11 @@ import Navbar from '../../../components/runback/navbar';
 import { IRegisterType } from '../../../apiCalls/types';
 import { AxiosResponse } from 'axios';
 import { useDispatch } from 'react-redux';
-import { registerFail, registerPending, registerSuccess } from './registerSlice';
+import { addUser, registerFail, registerPending, registerSuccess, saveUser } from './registerSlice';
 import { useToast } from "../../../components/runback/Toast/useToast";
 import { positionClasses } from "../../../components/runback/Toast/utils";
 import { RequiredToastProps } from '../../../components/runback/Toast/type';
+import { useAppDispatch } from '../../../store/store';
 
 const inputClasses =
   "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-black/30 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500";
@@ -27,7 +28,7 @@ const Register = () => {
   const [registering, setRegistering] = useState(false);
   const [error, setError] = useState('');
   const { register, handleSubmit } = useForm<IRegisterType>();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { add } = useToast();
   const history = useNavigate();
   const demo = () => {
@@ -44,15 +45,22 @@ const Register = () => {
       console.log("Data...",data);
       
       // data.email
-      const response: AxiosResponse = await registerUser(data) as AxiosResponse
-      console.log(response );
-      
-        if (response.data.status === 200) {
+      dispatch(saveUser({ name: data.name, email: data.email, password: data.password, role: data.role }))
+      .then((action) => {
+        if (saveUser.fulfilled.match(action)) {
           dispatch(registerSuccess)
-          console.log(response);
-          showToast(false, 'success', response.data.message, 3000, 'topCenter');
-          // history("/login");
+          showToast(false, 'success','User added Successfully!!!' , 3000, 'topCenter');
         }
+      })
+      //const response: AxiosResponse = await registerUser(data) as AxiosResponse
+      //console.log(response );
+      
+        // if (saveUser.fulfilled()) {
+        //   dispatch(registerSuccess)
+        //   console.log(response);
+        //   showToast(false, 'success', response.data.message, 3000, 'topCenter');
+        //   // history("/login");
+        // }
       
       
       

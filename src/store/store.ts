@@ -6,7 +6,7 @@ import userStateReducer from './features/authSlice';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 import { combineReducers } from '@reduxjs/toolkit';
-
+import { registerSlice } from '../pages/runback/Register/registerSlice';
 const persistConfig = {
   key: "root",
   version: 1,
@@ -15,6 +15,7 @@ const persistConfig = {
 
 const reducer = combineReducers({
   userState: userStateReducer,
+  user:registerSlice.reducer
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

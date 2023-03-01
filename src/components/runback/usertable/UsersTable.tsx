@@ -10,6 +10,7 @@ import roles from '../../../utils/constants'
 import { AxiosResponse } from 'axios';
 import { useDispatch } from 'react-redux';
 import { usersFail, usersPending, usersSuccess } from './userSlice';
+import { useAppSelector } from '../../../store/store';
 let response: IUser[];
 interface Props {
   users: IUser[];
@@ -48,10 +49,13 @@ const UsersTable:React.FC<Props> = ({users}) => {
   const { add } = useToast();
 
   const [showForm, setShowForm] = useState(false);
+
   const [formData, setFormData] = useState<PassFormData>({
     newPass: "",
     confPass: "",
   });
+  const Users = useAppSelector((state) => state.user.users);
+  console.log("Users from asyncThunk call ...", Users);
   
   // }
 

@@ -5,14 +5,16 @@ import { IUser } from '../../../apiCalls/types'
 import Navbar from '../../../components/runback/navbar'
 import { usersFail, usersPending, usersSuccess } from '../../../components/runback/usertable/userSlice'
 import UsersTable from '../../../components/runback/usertable/UsersTable'
-
+import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { RootState } from '../../../store/store'
+import { fetchUser } from '../Register/registerSlice'
 let response:IUser[];
 const ManageUser = () => {
   const [users, setUsers] = useState<IUser[]>([]);
   // const {isLoggedIn, updateIsLoggedIn, role, updateUserRole } = useContext(AuthContext) as AuthContextData;
   const userState = useSelector((state: RootState) => state.userState.isLoggedIn);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const allUsers = useAppSelector((state) => state.user.users);
   let usersVal:IUser[];
   useEffect(() => {
     const fetchData = async () => {
@@ -25,13 +27,14 @@ const ManageUser = () => {
       //   })
       // };
       // fetchData();
-      dispatch(usersPending);
+      //dispatch(usersPending);
       try {
         usersVal = await getUsers() as IUser[];
-        console.log("users....", usersVal);
-        if (!usersVal) {
-          return dispatch(usersFail)
-        }
+        dispatch(fetchUser());
+        //console.log("users....", usersVal);
+        // if (!usersVal) {
+        //   return dispatch(usersFail)
+        // }
                                                                                                                                                                                                                                                                                                                                                                                   
         setUsers(usersVal);
         dispatch(usersSuccess);
